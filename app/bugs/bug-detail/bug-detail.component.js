@@ -11,15 +11,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var forms_1 = require('@angular/forms');
 var forbidden_string_validator_1 = require('../../shared/validation/forbidden-string.validator');
+var bug_service_1 = require('../service/bug.service');
+var bug_1 = require('../model/bug');
 var BugDetailComponent = (function () {
-    function BugDetailComponent(formB) {
+    function BugDetailComponent(formB, bugService) {
         this.formB = formB;
+        this.bugService = bugService;
         this.modalId = "bugModal";
+        this.currentBug = new bug_1.Bug(null, null, 1, 1, null, null, null, null, null);
     }
     BugDetailComponent.prototype.ngOnInit = function () {
         this.configureForm();
     };
-    BugDetailComponent.prototype.configureForm = function () {
+    BugDetailComponent.prototype.configureForm = function (bug) {
         // this.bugForm = new FormGroup({
         //     title: new FormControl(null, [Validators.required, forbiddenStringValidator(/puppy/i)]),
         //     status: new FormControl(1, Validators.required),
@@ -27,16 +31,46 @@ var BugDetailComponent = (function () {
         //     description: new FormControl(null, Validators.required)
         // }); 
         // BELOW IS ANOTHER WAY TO CREATE THE REACTIVE FORM. YOU NEED TO IMPORT FormBuilder TO DO IT THIS WAY
+        if (bug) {
+            this.currentBug = new bug_1.Bug(bug.id, bug.title, bug.status, bug.severity, bug.description, bug.createdBy, bug.createdDate, bug.updatedBy, bug.updatedDate);
+        }
         this.bugForm = this.formB.group({
-            title: [null, [forms_1.Validators.required, forbidden_string_validator_1.forbiddenStringValidator(/puppy/i)]],
-            status: [1, forms_1.Validators.required],
-            severity: [1, forms_1.Validators.required],
-            description: [null, forms_1.Validators.required]
+            title: [this.currentBug.title, [forms_1.Validators.required, forbidden_string_validator_1.forbiddenStringValidator(/puppy/i)]],
+            status: [this.currentBug.status, forms_1.Validators.required],
+            severity: [this.currentBug.severity, forms_1.Validators.required],
+            description: [this.currentBug.description, forms_1.Validators.required]
         });
     };
     BugDetailComponent.prototype.submitForm = function () {
-        console.log(this.bugForm);
+        this.currentBug.title = this.bugForm.value["title"];
+        this.currentBug.status = this.bugForm.value["status"];
+        this.currentBug.severity = this.bugForm.value["severity"];
+        this.currentBug.description = this.bugForm.value["description"];
+        if (this.currentBug.id) {
+            this.updateBug();
+        }
+        else {
+            this.addBug();
+        }
+        this.freshForm();
     };
+    BugDetailComponent.prototype.addBug = function () {
+        this.bugService.addBug(this.currentBug);
+    };
+    BugDetailComponent.prototype.updateBug = function () {
+        this.bugService.updateBug(this.currentBug);
+    };
+    BugDetailComponent.prototype.freshForm = function () {
+        this.bugForm.reset({ status: 1, severity: 1 });
+        this.cleanBug();
+    };
+    BugDetailComponent.prototype.cleanBug = function () {
+        this.currentBug = new bug_1.Bug(null, null, 1, 1, null, null, null, null, null);
+    };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], BugDetailComponent.prototype, "currentBug", void 0);
     BugDetailComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
@@ -44,7 +78,7 @@ var BugDetailComponent = (function () {
             templateUrl: 'bug-detail.component.html',
             styleUrls: ['bug-detail.component.css']
         }), 
-        __metadata('design:paramtypes', [forms_1.FormBuilder])
+        __metadata('design:paramtypes', [forms_1.FormBuilder, bug_service_1.BugService])
     ], BugDetailComponent);
     return BugDetailComponent;
 }());
