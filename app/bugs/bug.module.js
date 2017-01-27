@@ -9,32 +9,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var platform_browser_1 = require('@angular/platform-browser');
-var bug_module_1 = require('./bugs/bug.module');
-var app_routing_module_1 = require('./app-routing.module');
-var core_module_1 = require('./core/core.module');
-var app_component_1 = require('./app.component');
-var navbar_component_1 = require('./navbar/navbar.component');
-var AppModule = (function () {
-    function AppModule() {
+var shared_module_1 = require('../shared/shared.module');
+var bug_routing_module_1 = require('./bug-routing.module');
+var forms_1 = require('@angular/forms');
+var bug_list_component_1 = require('./bug-list/bug-list.component');
+var bug_detail_component_1 = require('./bug-detail/bug-detail.component');
+var bug_service_1 = require('./service/bug.service');
+var BugModule = (function () {
+    function BugModule() {
     }
-    AppModule = __decorate([
+    BugModule = __decorate([
         core_1.NgModule({
             imports: [
-                platform_browser_1.BrowserModule,
-                bug_module_1.BugModule,
-                app_routing_module_1.AppRoutingModule,
-                core_module_1.CoreModule.forRoot()
+                shared_module_1.SharedModule,
+                bug_routing_module_1.BugRoutingModule,
+                forms_1.ReactiveFormsModule
             ],
             declarations: [
-                app_component_1.AppComponent,
-                navbar_component_1.NavbarComponent
+                bug_list_component_1.BugListComponent,
+                bug_detail_component_1.BugDetailComponent
             ],
-            bootstrap: [app_component_1.AppComponent]
+            exports: [],
+            providers: [
+                bug_service_1.BugService
+            ]
         }), 
         __metadata('design:paramtypes', [])
-    ], AppModule);
-    return AppModule;
+    ], BugModule);
+    return BugModule;
 }());
-exports.AppModule = AppModule;
-//# sourceMappingURL=app.module.js.map
+exports.BugModule = BugModule;
+//# sourceMappingURL=bug.module.js.map

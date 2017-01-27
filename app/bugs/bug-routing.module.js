@@ -9,18 +9,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var AppComponent = (function () {
-    function AppComponent() {
+var router_1 = require('@angular/router');
+var bug_list_component_1 = require('./bug-list/bug-list.component');
+var BugRoutingModule = (function () {
+    function BugRoutingModule() {
     }
-    AppComponent = __decorate([
-        core_1.Component({
-            selector: 'my-app',
-            template: "\n    <navbar></navbar>\n        <div class=\"container\">\n    <router-outlet></router-outlet>\n    </div>\n    ",
-            styles: ["\n        .container {\n            margin-top: 5rem;\n        }\n    "]
+    BugRoutingModule = __decorate([
+        core_1.NgModule({
+            imports: [
+                router_1.RouterModule.forChild([
+                    { path: '', redirectTo: 'bugs', pathMatch: 'full' },
+                    { path: 'bugs', component: bug_list_component_1.BugListComponent },
+                    { path: '**', redirectTo: 'bugs' }
+                ])
+            ],
+            exports: [router_1.RouterModule]
         }), 
         __metadata('design:paramtypes', [])
-    ], AppComponent);
-    return AppComponent;
+    ], BugRoutingModule);
+    return BugRoutingModule;
 }());
-exports.AppComponent = AppComponent;
-//# sourceMappingURL=app.component.js.map
+exports.BugRoutingModule = BugRoutingModule;
+//# sourceMappingURL=bug-routing.module.js.map
