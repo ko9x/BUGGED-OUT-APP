@@ -13,26 +13,35 @@ var forms_1 = require('@angular/forms');
 var forbidden_string_validator_1 = require('../../shared/validation/forbidden-string.validator');
 var bug_service_1 = require('../service/bug.service');
 var bug_1 = require('../model/bug');
+var constants_1 = require('../../shared/constant/constants');
 var BugDetailComponent = (function () {
     function BugDetailComponent(formB, bugService) {
         this.formB = formB;
         this.bugService = bugService;
         this.modalId = "bugModal";
-        this.currentBug = new bug_1.Bug(null, null, 1, 1, null, null, null, null, null);
+        this.statuses = constants_1.STATUS;
+        this.severities = constants_1.SEVERITY;
+        this.statusArr = [];
+        this.severityArr = [];
+        this.currentBug = new bug_1.Bug(null, null, this.statuses.Logged, this.severities.Severe, null, null, null, null, null);
     }
     BugDetailComponent.prototype.ngOnInit = function () {
+        this.statusArr = Object.keys(this.statuses).filter(Number);
+        this.severityArr = Object.keys(this.severities).filter(Number);
         this.configureForm();
     };
     BugDetailComponent.prototype.configureForm = function (bug) {
         // this.bugForm = new FormGroup({
-        //     title: new FormControl(null, [Validators.required, forbiddenStringValidator(/puppy/i)]),
-        //     status: new FormControl(1, Validators.required),
-        //     severity: new FormControl(1, Validators.required),
-        //     description: new FormControl(null, Validators.required)
+        //     title: new FormControl(this.currentBug.title, [Validators.required, forbiddenStringValidator(/puppy/i)]),
+        //     status: new FormControl(this.currentBug.status, Validators.required),
+        //     severity: new FormControl(this.currentBug.severity, Validators.required),
+        //     description: new FormControl(this.currentBug.description, Validators.required)
         // }); 
         // BELOW IS ANOTHER WAY TO CREATE THE REACTIVE FORM. YOU NEED TO IMPORT FormBuilder TO DO IT THIS WAY
         if (bug) {
+            console.log("running configure form");
             this.currentBug = new bug_1.Bug(bug.id, bug.title, bug.status, bug.severity, bug.description, bug.createdBy, bug.createdDate, bug.updatedBy, bug.updatedDate);
+            console.log("done running configure form");
         }
         this.bugForm = this.formB.group({
             title: [this.currentBug.title, [forms_1.Validators.required, forbidden_string_validator_1.forbiddenStringValidator(/puppy/i)]],
@@ -52,7 +61,6 @@ var BugDetailComponent = (function () {
         else {
             this.addBug();
         }
-        this.freshForm();
     };
     BugDetailComponent.prototype.addBug = function () {
         this.bugService.addBug(this.currentBug);
@@ -60,17 +68,17 @@ var BugDetailComponent = (function () {
     BugDetailComponent.prototype.updateBug = function () {
         this.bugService.updateBug(this.currentBug);
     };
+    BugDetailComponent.prototype.removeBug = function () {
+        this.bugService.removeBug(this.currentBug);
+    };
     BugDetailComponent.prototype.freshForm = function () {
-        this.bugForm.reset({ status: 1, severity: 1 });
+        this.bugForm.reset({ status: this.statuses.Logged, severity: this.severities.Severe });
         this.cleanBug();
+        console.log("freshForm ran");
     };
     BugDetailComponent.prototype.cleanBug = function () {
-        this.currentBug = new bug_1.Bug(null, null, 1, 1, null, null, null, null, null);
+        this.currentBug = new bug_1.Bug(null, null, this.statuses.Logged, this.severities.Severe, null, null, null, null, null);
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], BugDetailComponent.prototype, "currentBug", void 0);
     BugDetailComponent = __decorate([
         core_1.Component({
             moduleId: module.id,

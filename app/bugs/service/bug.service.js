@@ -29,6 +29,7 @@ var BugService = (function () {
             });
         });
     };
+    // WATCHES THE DATABASE AND TELLS THE SUBSCRIBER IF A BUG HAS BEEN CHANGED
     BugService.prototype.changedListener = function () {
         var _this = this;
         return Observable_1.Observable.create(function (obs) {
@@ -36,6 +37,19 @@ var BugService = (function () {
                 var updatedBug = bug.val();
                 updatedBug.id = bug.key;
                 obs.next(updatedBug);
+            }, function (err) {
+                obs.throw(err);
+            });
+        });
+    };
+    // WATCHES THE DATABASE AND TELLS THE SUBSCRIBER IF A BUG HAS BEEN DELETED
+    BugService.prototype.deletedListener = function () {
+        var _this = this;
+        return Observable_1.Observable.create(function (obs) {
+            _this.bugsDbRef.on('child_removed', function (bug) {
+                var removedBug = bug.val();
+                removedBug.id = bug.key;
+                obs.next(removedBug);
             }, function (err) {
                 obs.throw(err);
             });
@@ -60,6 +74,10 @@ var BugService = (function () {
         bug.updatedBy = "Billy";
         bug.updatedDate = Date.now();
         currentBugRef.update(bug);
+    };
+    BugService.prototype.removeBug = function (bug) {
+        var currentBugRef = this.bugsDbRef.child(bug.id);
+        this.bugsDbRef.child(bug.id).remove();
     };
     BugService = __decorate([
         core_1.Injectable(), 

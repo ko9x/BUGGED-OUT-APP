@@ -17,8 +17,13 @@ export class BugListComponent implements OnInit {
     constructor(private bugService: BugService) { }
 
     ngOnInit() {
+        
         this.getAddedBugs();
+        
         this.getUpdatedBugs();
+
+        this.removeDeletedBugs();
+
 
     }
 
@@ -32,21 +37,43 @@ export class BugListComponent implements OnInit {
             });
     }
 
+    // getUpdatedBugs() {
+    //     console.log("about to run get updated bugs")
+    //     this.bugService.changedListener()
+    //         .subscribe(updatedBug => {
+    //             this.bugs = this.bugs.map(bug => {
+    //                 if (bug.id === updatedBug.id) {
+    //                     console.log("ran get updated bugs")
+    //                     return updatedBug;
+    //                 } else {
+    //                     return bug;
+    //                 }
+    //             },
+    //             err => {
+    //                 console.error("Unable to get updated bug - ", err)
+    //             });
+    //         });
+    // }
+
+    // HERE IS ANOTHER WAY TO FIND THE CORRECT ITEM IN THE ARRAY TO UPDATE
     getUpdatedBugs() {
         this.bugService.changedListener()
             .subscribe(updatedBug => {
-                this.bugs = this.bugs.map(bug => {
-                    if (bug.id === updatedBug.id) {
-                        return updatedBug;
-                    } else {
-                        return bug;
-                    }
-                },
-                err => {
-                    console.error("Unable to get updated bug - ", err)
-                }
-                );
+                const bugIndex = this.bugs.map(index => index.id).indexOf(updatedBug['id']);
+                this.bugs[bugIndex] = updatedBug;
+            },
+            err => {
+                console.error("Unable to get updated bug - ", err);
             });
+    }
+
+    removeDeletedBugs() {
+        this.bugService.deletedListener()
+            .subscribe(removedBug => {
+                const bugIndex = this.bugs.map(index => index.id).indexOf(removedBug['id']);
+                this.bugs[bugIndex] = removedBug;
+                this.bugs.splice(bugIndex, 1)
+            })
     }
 
 }

@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { forbiddenStringValidator } from '../../shared/validation/forbidden-string.validator';
 
 import { BugService } from '../service/bug.service';
 import { Bug } from '../model/bug';
+import { STATUS, SEVERITY } from '../../shared/constant/constants';
 
 @Component({
     moduleId: module.id,
@@ -14,24 +15,32 @@ import { Bug } from '../model/bug';
 export class BugDetailComponent implements OnInit { 
     private modalId = "bugModal";
     private bugForm: FormGroup;
-    @Input() currentBug = new Bug (null, null, 1, 1, null, null, null, null, null);
+    private statuses = STATUS;
+    private severities = SEVERITY;
+    private statusArr: string[] = [];
+    private severityArr: string[] = [];
+
+    private currentBug = new Bug (null, null, this.statuses.Logged, this.severities.Severe, null, null, null, null, null);
 
     constructor(private formB: FormBuilder, private bugService: BugService) { }
 
     ngOnInit() {
+        this.statusArr = Object.keys(this.statuses).filter(Number);
+        this.severityArr = Object.keys(this.severities).filter(Number);
         this.configureForm();
     }
 
     configureForm(bug?: Bug) {
         // this.bugForm = new FormGroup({
-        //     title: new FormControl(null, [Validators.required, forbiddenStringValidator(/puppy/i)]),
-        //     status: new FormControl(1, Validators.required),
-        //     severity: new FormControl(1, Validators.required),
-        //     description: new FormControl(null, Validators.required)
+        //     title: new FormControl(this.currentBug.title, [Validators.required, forbiddenStringValidator(/puppy/i)]),
+        //     status: new FormControl(this.currentBug.status, Validators.required),
+        //     severity: new FormControl(this.currentBug.severity, Validators.required),
+        //     description: new FormControl(this.currentBug.description, Validators.required)
         // }); 
 
         // BELOW IS ANOTHER WAY TO CREATE THE REACTIVE FORM. YOU NEED TO IMPORT FormBuilder TO DO IT THIS WAY
         if (bug) {
+            console.log("running configure form")
             this.currentBug = new Bug(
                 bug.id,
                 bug.title,
@@ -42,7 +51,8 @@ export class BugDetailComponent implements OnInit {
                 bug.createdDate,
                 bug.updatedBy,
                 bug.updatedDate
-            );
+            
+            ); console.log("done running configure form");
         }
         this.bugForm = this.formB.group({
             title: [this.currentBug.title, [Validators.required, forbiddenStringValidator(/puppy/i)]],
@@ -62,7 +72,6 @@ export class BugDetailComponent implements OnInit {
         } else {
             this.addBug()
         }
-        this.freshForm();
     }
 
     addBug() {
@@ -73,13 +82,18 @@ export class BugDetailComponent implements OnInit {
         this.bugService.updateBug(this.currentBug);
     }
 
+    removeBug() {
+        this.bugService.removeBug(this.currentBug);
+    }
+
     freshForm() {
-        this.bugForm.reset({status: 1, severity: 1});
+        this.bugForm.reset({status: this.statuses.Logged, severity: this.severities.Severe});
         this.cleanBug();
+        console.log("freshForm ran");
     }
 
     cleanBug() {
-        this.currentBug = new Bug(null, null, 1, 1, null, null, null, null, null);
+        this.currentBug = new Bug(null, null, this.statuses.Logged, this.severities.Severe, null, null, null, null, null);
     }
 
 }

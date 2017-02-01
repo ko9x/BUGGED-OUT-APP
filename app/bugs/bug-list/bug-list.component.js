@@ -18,6 +18,7 @@ var BugListComponent = (function () {
     BugListComponent.prototype.ngOnInit = function () {
         this.getAddedBugs();
         this.getUpdatedBugs();
+        this.removeDeletedBugs();
     };
     BugListComponent.prototype.getAddedBugs = function () {
         var _this = this;
@@ -28,20 +29,41 @@ var BugListComponent = (function () {
             console.error("Unable to get added bug -", err);
         });
     };
+    // getUpdatedBugs() {
+    //     console.log("about to run get updated bugs")
+    //     this.bugService.changedListener()
+    //         .subscribe(updatedBug => {
+    //             this.bugs = this.bugs.map(bug => {
+    //                 if (bug.id === updatedBug.id) {
+    //                     console.log("ran get updated bugs")
+    //                     return updatedBug;
+    //                 } else {
+    //                     return bug;
+    //                 }
+    //             },
+    //             err => {
+    //                 console.error("Unable to get updated bug - ", err)
+    //             });
+    //         });
+    // }
+    // HERE IS ANOTHER WAY TO FIND THE CORRECT ITEM IN THE ARRAY TO UPDATE
     BugListComponent.prototype.getUpdatedBugs = function () {
         var _this = this;
         this.bugService.changedListener()
             .subscribe(function (updatedBug) {
-            _this.bugs = _this.bugs.map(function (bug) {
-                if (bug.id === updatedBug.id) {
-                    return updatedBug;
-                }
-                else {
-                    return bug;
-                }
-            }, function (err) {
-                console.error("Unable to get updated bug - ", err);
-            });
+            var bugIndex = _this.bugs.map(function (index) { return index.id; }).indexOf(updatedBug['id']);
+            _this.bugs[bugIndex] = updatedBug;
+        }, function (err) {
+            console.error("Unable to get updated bug - ", err);
+        });
+    };
+    BugListComponent.prototype.removeDeletedBugs = function () {
+        var _this = this;
+        this.bugService.deletedListener()
+            .subscribe(function (removedBug) {
+            var bugIndex = _this.bugs.map(function (index) { return index.id; }).indexOf(removedBug['id']);
+            _this.bugs[bugIndex] = removedBug;
+            _this.bugs.splice(bugIndex, 1);
         });
     };
     BugListComponent = __decorate([

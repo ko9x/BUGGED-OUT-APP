@@ -9,6 +9,7 @@ import { FirebaseConfigService } from '../../core/service/firebase-config.servic
 export class BugService {
 
     private bugsDbRef = this.fire.database.ref('/bugs');
+    
 
     constructor(private fire: FirebaseConfigService) { }
     // WATCHES THE DATABASE AND TELLS THE SUBSCRIBER IF A BUG HAS BEEN ADDED TO THE DATABASE
@@ -24,13 +25,27 @@ export class BugService {
                 });
         });
     }
-
+    // WATCHES THE DATABASE AND TELLS THE SUBSCRIBER IF A BUG HAS BEEN CHANGED
     changedListener(): Observable<any> {
         return Observable.create(obs => {
             this.bugsDbRef.on('child_changed', bug => {
                 const updatedBug = bug.val() as Bug;
                 updatedBug.id = bug.key;
                 obs.next(updatedBug);
+            },
+            err => {
+                obs.throw(err);
+            });
+        });
+    }
+
+    // WATCHES THE DATABASE AND TELLS THE SUBSCRIBER IF A BUG HAS BEEN DELETED
+    deletedListener(): Observable<any> {
+        return Observable.create(obs => {
+            this.bugsDbRef.on('child_removed', bug => {
+                const removedBug = bug.val() as Bug;
+                removedBug.id = bug.key;
+                obs.next(removedBug);
             },
             err => {
                 obs.throw(err);
@@ -57,5 +72,10 @@ export class BugService {
         bug.updatedBy = "Billy";
         bug.updatedDate = Date.now();
         currentBugRef.update(bug);
+    }
+
+    removeBug(bug: Bug) {
+        const currentBugRef = this.bugsDbRef.child(bug.id)
+        this.bugsDbRef.child(bug.id).remove()
     }
 }
