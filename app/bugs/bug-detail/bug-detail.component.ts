@@ -40,7 +40,6 @@ export class BugDetailComponent implements OnInit {
 
         // BELOW IS ANOTHER WAY TO CREATE THE REACTIVE FORM. YOU NEED TO IMPORT FormBuilder TO DO IT THIS WAY
         if (bug) {
-            console.log("running configure form")
             this.currentBug = new Bug(
                 bug.id,
                 bug.title,
@@ -52,7 +51,7 @@ export class BugDetailComponent implements OnInit {
                 bug.updatedBy,
                 bug.updatedDate
             
-            ); console.log("done running configure form");
+            );
         }
         this.bugForm = this.formB.group({
             title: [this.currentBug.title, [Validators.required, forbiddenStringValidator(/puppy/i)]],
@@ -82,14 +81,26 @@ export class BugDetailComponent implements OnInit {
         this.bugService.updateBug(this.currentBug);
     }
 
-    removeBug() {
+    removeBug(bug: Bug) {
+        this.currentBug = new Bug(
+                bug.id,
+                bug.title,
+                bug.status,
+                bug.severity,
+                bug.description,
+                bug.createdBy,
+                bug.createdDate,
+                bug.updatedBy,
+                bug.updatedDate
+            );
         this.bugService.removeBug(this.currentBug);
+        event.stopPropagation();
+        
     }
 
     freshForm() {
         this.bugForm.reset({status: this.statuses.Logged, severity: this.severities.Severe});
         this.cleanBug();
-        console.log("freshForm ran");
     }
 
     cleanBug() {

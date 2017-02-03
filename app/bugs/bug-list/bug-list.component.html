@@ -28,7 +28,7 @@
                     <td>{{bug.description}}</td>
                     <td>{{bug.createdBy}}</td>
                     <td>{{bug.createdDate | date: 'short'}}</td>
-                    <td><button (click)="bugDetail.removeBug(bug)">Delete</button></td>       
+                    <td><button (click)="bugDetail.removeBug(bug, $event)">Delete</button></td>       
                 </tr>
             </tbody>
         </table>

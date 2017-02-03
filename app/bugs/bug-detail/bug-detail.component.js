@@ -39,9 +39,7 @@ var BugDetailComponent = (function () {
         // }); 
         // BELOW IS ANOTHER WAY TO CREATE THE REACTIVE FORM. YOU NEED TO IMPORT FormBuilder TO DO IT THIS WAY
         if (bug) {
-            console.log("running configure form");
             this.currentBug = new bug_1.Bug(bug.id, bug.title, bug.status, bug.severity, bug.description, bug.createdBy, bug.createdDate, bug.updatedBy, bug.updatedDate);
-            console.log("done running configure form");
         }
         this.bugForm = this.formB.group({
             title: [this.currentBug.title, [forms_1.Validators.required, forbidden_string_validator_1.forbiddenStringValidator(/puppy/i)]],
@@ -68,13 +66,14 @@ var BugDetailComponent = (function () {
     BugDetailComponent.prototype.updateBug = function () {
         this.bugService.updateBug(this.currentBug);
     };
-    BugDetailComponent.prototype.removeBug = function () {
+    BugDetailComponent.prototype.removeBug = function (bug) {
+        this.currentBug = new bug_1.Bug(bug.id, bug.title, bug.status, bug.severity, bug.description, bug.createdBy, bug.createdDate, bug.updatedBy, bug.updatedDate);
         this.bugService.removeBug(this.currentBug);
+        event.stopPropagation();
     };
     BugDetailComponent.prototype.freshForm = function () {
         this.bugForm.reset({ status: this.statuses.Logged, severity: this.severities.Severe });
         this.cleanBug();
-        console.log("freshForm ran");
     };
     BugDetailComponent.prototype.cleanBug = function () {
         this.currentBug = new bug_1.Bug(null, null, this.statuses.Logged, this.severities.Severe, null, null, null, null, null);
