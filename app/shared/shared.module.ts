@@ -7,6 +7,6 @@ import { SeverityPipe } from './pipe/severity.pipe';
 @NgModule({
     imports: [CommonModule],
     declarations: [StatusPipe, SeverityPipe],
-    exports: [CommonModule, StatusPipe, SeverityPipe]
+    exports: [ CommonModule, StatusPipe, SeverityPipe]
 })
 export class SharedModule { }

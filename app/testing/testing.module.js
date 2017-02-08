@@ -9,24 +9,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var router_1 = require('@angular/router');
-var bug_list_component_1 = require('./bug-list/bug-list.component');
-var BugRoutingModule = (function () {
-    function BugRoutingModule() {
+var shared_module_1 = require('../shared/shared.module');
+var testing_routing_module_1 = require('./testing-routing.module');
+var forms_1 = require('@angular/forms');
+var testing_component_1 = require('./testing.component');
+var TestingModule = (function () {
+    function TestingModule() {
     }
-    BugRoutingModule = __decorate([
+    TestingModule = __decorate([
         core_1.NgModule({
             imports: [
-                router_1.RouterModule.forChild([
-                    { path: '', redirectTo: 'bugs', pathMatch: 'full' },
-                    { path: 'bugs', component: bug_list_component_1.BugListComponent }
-                ])
+                shared_module_1.SharedModule,
+                testing_routing_module_1.TestingRoutingModule,
+                forms_1.ReactiveFormsModule
             ],
-            exports: [router_1.RouterModule]
+            declarations: [
+                testing_component_1.TestingComponent
+            ],
+            exports: [],
+            providers: []
         }), 
         __metadata('design:paramtypes', [])
-    ], BugRoutingModule);
-    return BugRoutingModule;
+    ], TestingModule);
+    return TestingModule;
 }());
-exports.BugRoutingModule = BugRoutingModule;
-//# sourceMappingURL=bug-routing.module.js.map
+exports.TestingModule = TestingModule;
+//# sourceMappingURL=testing.module.js.map

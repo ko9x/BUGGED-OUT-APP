@@ -77,7 +77,7 @@ var BugService = (function () {
     };
     BugService.prototype.removeBug = function (bug) {
         var currentBugRef = this.bugsDbRef.child(bug.id);
-        this.bugsDbRef.child(bug.id).remove();
+        currentBugRef.remove();
     };
     BugService = __decorate([
         core_1.Injectable(), 

@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { BugListComponent } from './bug-list/bug-list.component';
+import { TestingComponent } from './testing.component';
 
 @NgModule({
     imports: [
         RouterModule.forChild([
             { path: '', redirectTo: 'bugs', pathMatch: 'full'},
-            { path: 'bugs', component: BugListComponent }
-            // { path: '**', redirectTo: 'bugs' }
+            { path: 'testing', component: TestingComponent },
+            { path: '**', redirectTo: 'bugs' }
         ])
     ],
     exports: [RouterModule]
 })
-export class BugRoutingModule { }
+export class TestingRoutingModule { }
