@@ -14,6 +14,7 @@ var firebase_config_service_1 = require('../../core/service/firebase-config.serv
 var BugService = (function () {
     function BugService(fire) {
         this.fire = fire;
+        // THE DATABASE REFERANCED HERE COMES FROM THE DATA ENCAPSULATION METHOD USED IN THE FIREBASE-CONFIG.SERVICE
         this.bugsDbRef = this.fire.database.ref('/bugs');
     }
     // WATCHES THE DATABASE AND TELLS THE SUBSCRIBER IF A BUG HAS BEEN ADDED TO THE DATABASE

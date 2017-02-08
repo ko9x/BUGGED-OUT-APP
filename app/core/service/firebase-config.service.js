@@ -18,6 +18,7 @@ var FirebaseConfigService = (function () {
         this.configureDatabase();
     }
     Object.defineProperty(FirebaseConfigService.prototype, "database", {
+        // DATA ENCAPSULATION METHOD TO SHARE THIS PROPERTY WITH ANOTHER CLASS
         get: function () {
             return this._database;
         },

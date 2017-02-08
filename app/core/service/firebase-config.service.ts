@@ -15,8 +15,9 @@ export class FirebaseConfigService {
         this.configureDatabase();
     }
 
+    // DATA ENCAPSULATION METHOD TO SHARE THIS PROPERTY WITH ANOTHER CLASS
     public get database() {
-        return this._database;
+        return this._database;  
     }
 
     configureApp() {

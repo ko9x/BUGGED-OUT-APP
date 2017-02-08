@@ -7,7 +7,7 @@ import { FirebaseConfigService } from '../../core/service/firebase-config.servic
 
 @Injectable()
 export class BugService {
-
+    // THE DATABASE REFERANCED HERE COMES FROM THE DATA ENCAPSULATION METHOD USED IN THE FIREBASE-CONFIG.SERVICE
     private bugsDbRef = this.fire.database.ref('/bugs');
     
 
