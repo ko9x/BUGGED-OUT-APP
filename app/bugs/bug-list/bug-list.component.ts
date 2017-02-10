@@ -59,7 +59,7 @@ export class BugListComponent implements OnInit {
     getUpdatedBugs() {
         this.bugService.changedListener()
             .subscribe(updatedBug => {
-                const bugIndex = this.bugs.map(index => index.id).indexOf(updatedBug['id']);
+                const bugIndex = this.bugs.map(bug => bug.id).indexOf(updatedBug['id']);
                 this.bugs[bugIndex] = updatedBug;
             },
             err => {
@@ -70,10 +70,13 @@ export class BugListComponent implements OnInit {
     removeDeletedBugs() {
         this.bugService.deletedListener()
             .subscribe(removedBug => {
-                const bugIndex = this.bugs.map(index => index.id).indexOf(removedBug['id']);
+                const bugIndex = this.bugs.map(bug => bug.id).indexOf(removedBug['id']);
                 this.bugs[bugIndex] = removedBug;
                 this.bugs.splice(bugIndex, 1)
-            })
+            },
+            err => {
+                console.error("Unable to delete bug - ", err);
+            });
     }
 
 }

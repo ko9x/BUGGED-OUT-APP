@@ -51,7 +51,7 @@ var BugListComponent = (function () {
         var _this = this;
         this.bugService.changedListener()
             .subscribe(function (updatedBug) {
-            var bugIndex = _this.bugs.map(function (index) { return index.id; }).indexOf(updatedBug['id']);
+            var bugIndex = _this.bugs.map(function (bug) { return bug.id; }).indexOf(updatedBug['id']);
             _this.bugs[bugIndex] = updatedBug;
         }, function (err) {
             console.error("Unable to get updated bug - ", err);
@@ -61,9 +61,11 @@ var BugListComponent = (function () {
         var _this = this;
         this.bugService.deletedListener()
             .subscribe(function (removedBug) {
-            var bugIndex = _this.bugs.map(function (index) { return index.id; }).indexOf(removedBug['id']);
+            var bugIndex = _this.bugs.map(function (bug) { return bug.id; }).indexOf(removedBug['id']);
             _this.bugs[bugIndex] = removedBug;
             _this.bugs.splice(bugIndex, 1);
+        }, function (err) {
+            console.error("Unable to delete bug - ", err);
         });
     };
     BugListComponent = __decorate([

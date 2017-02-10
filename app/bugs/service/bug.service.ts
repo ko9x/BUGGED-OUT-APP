@@ -69,7 +69,7 @@ export class BugService {
     updateBug(bug: Bug) {
         const currentBugRef = this.bugsDbRef.child(bug.id);
         bug.id = null;
-        bug.updatedBy = "Billy";
+        bug.updatedBy = "Samantha";
         bug.updatedDate = Date.now();
         currentBugRef.update(bug);
     }

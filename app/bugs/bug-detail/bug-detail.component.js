@@ -31,22 +31,23 @@ var BugDetailComponent = (function () {
         this.configureForm();
     };
     BugDetailComponent.prototype.configureForm = function (bug) {
+        if (bug) {
+            this.currentBug = new bug_1.Bug(bug.id, bug.title, bug.status, bug.severity, bug.description, bug.createdBy, bug.createdDate, bug.updatedBy, bug.updatedDate);
+        }
+        // BELOW IS A WAY TO CREATE THE REACTIVE FORM. YOU NEED TO IMPORT FormBuilder AND ADD AN INSTANCE TO THE CONSTRUCTOR TO DO IT THIS WAY
+        this.bugForm = this.formB.group({
+            title: [this.currentBug.title, [forms_1.Validators.required, forbidden_string_validator_1.forbiddenStringValidator(/puppy/i), forbidden_string_validator_1.forbiddenStringValidator(/dog/i)]],
+            status: [this.currentBug.status, forms_1.Validators.required],
+            severity: [this.currentBug.severity, forms_1.Validators.required],
+            description: [this.currentBug.description, forms_1.Validators.required]
+        });
+        // BELOW IS ANOTHER WAY TO CREATE THE REACTIVE FORM. YOU DONT NEED TO IMPORT FormBuilder TO DO IT THIS WAY BUT THE SYNTAX IS A LITTLE LONGER
         // this.bugForm = new FormGroup({
         //     title: new FormControl(this.currentBug.title, [Validators.required, forbiddenStringValidator(/puppy/i)]),
         //     status: new FormControl(this.currentBug.status, Validators.required),
         //     severity: new FormControl(this.currentBug.severity, Validators.required),
         //     description: new FormControl(this.currentBug.description, Validators.required)
         // }); 
-        // BELOW IS ANOTHER WAY TO CREATE THE REACTIVE FORM. YOU NEED TO IMPORT FormBuilder TO DO IT THIS WAY
-        if (bug) {
-            this.currentBug = new bug_1.Bug(bug.id, bug.title, bug.status, bug.severity, bug.description, bug.createdBy, bug.createdDate, bug.updatedBy, bug.updatedDate);
-        }
-        this.bugForm = this.formB.group({
-            title: [this.currentBug.title, [forms_1.Validators.required, forbidden_string_validator_1.forbiddenStringValidator(/puppy/i)]],
-            status: [this.currentBug.status, forms_1.Validators.required],
-            severity: [this.currentBug.severity, forms_1.Validators.required],
-            description: [this.currentBug.description, forms_1.Validators.required]
-        });
     };
     BugDetailComponent.prototype.submitForm = function () {
         this.currentBug.title = this.bugForm.value["title"];

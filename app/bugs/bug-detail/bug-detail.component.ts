@@ -22,7 +22,7 @@ export class BugDetailComponent implements OnInit {
 
     private currentBug = new Bug (null, null, this.statuses.Logged, this.severities.Severe, null, null, null, null, null);
 
-    constructor(private formB: FormBuilder, private bugService: BugService) { }
+    constructor( private formB: FormBuilder, private bugService: BugService) { }
 
     ngOnInit() {
         this.statusArr = Object.keys(this.statuses).filter(Number);
@@ -31,14 +31,7 @@ export class BugDetailComponent implements OnInit {
     }
 
     configureForm(bug?: Bug) {
-        // this.bugForm = new FormGroup({
-        //     title: new FormControl(this.currentBug.title, [Validators.required, forbiddenStringValidator(/puppy/i)]),
-        //     status: new FormControl(this.currentBug.status, Validators.required),
-        //     severity: new FormControl(this.currentBug.severity, Validators.required),
-        //     description: new FormControl(this.currentBug.description, Validators.required)
-        // }); 
-
-        // BELOW IS ANOTHER WAY TO CREATE THE REACTIVE FORM. YOU NEED TO IMPORT FormBuilder TO DO IT THIS WAY
+        
         if (bug) {
             this.currentBug = new Bug(
                 bug.id,
@@ -53,12 +46,24 @@ export class BugDetailComponent implements OnInit {
             
             );
         }
+        // BELOW IS A WAY TO CREATE THE REACTIVE FORM. YOU NEED TO IMPORT FormBuilder AND ADD AN INSTANCE TO THE CONSTRUCTOR TO DO IT THIS WAY
+
         this.bugForm = this.formB.group({
-            title: [this.currentBug.title, [Validators.required, forbiddenStringValidator(/puppy/i)]],
+            title: [this.currentBug.title, [Validators.required, forbiddenStringValidator(/puppy/i), forbiddenStringValidator(/dog/i)]],
             status: [this.currentBug.status, Validators.required],
             severity: [this.currentBug.severity, Validators.required],
             description: [this.currentBug.description, Validators.required]
         });
+
+        // BELOW IS ANOTHER WAY TO CREATE THE REACTIVE FORM. YOU DONT NEED TO IMPORT FormBuilder TO DO IT THIS WAY BUT THE SYNTAX IS A LITTLE LONGER
+
+        // this.bugForm = new FormGroup({
+        //     title: new FormControl(this.currentBug.title, [Validators.required, forbiddenStringValidator(/puppy/i)]),
+        //     status: new FormControl(this.currentBug.status, Validators.required),
+        //     severity: new FormControl(this.currentBug.severity, Validators.required),
+        //     description: new FormControl(this.currentBug.description, Validators.required)
+        // }); 
+
     }
 
     submitForm() {
